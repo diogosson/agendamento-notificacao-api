@@ -1,15 +1,13 @@
-package com.diogosson.agendamento_notificacao_api.controller.dto;
+package com.diogosson.agendamento_notificacao_api.controller;
 
 import com.diogosson.agendamento_notificacao_api.business.AgendamentoService;
 import com.diogosson.agendamento_notificacao_api.controller.dto.in.AgendamentoRecordIn;
 import com.diogosson.agendamento_notificacao_api.controller.dto.out.AgendamentoRecordOut;
+import com.diogosson.agendamento_notificacao_api.infrastructure.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/agendamento")
@@ -24,5 +22,15 @@ public class AgendamentoController {
         AgendamentoRecordOut agendamentoRecordOut = agendamentoService.gravarAgendamento(agendamentoRecordIn);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(agendamentoRecordOut);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AgendamentoRecordOut> buscarAgendamentoPorId(@PathVariable("id") Long id){
+        try {
+            AgendamentoRecordOut agendamentoRecordOut = agendamentoService.buscarAgendamentoPorId(id);
+            return  ResponseEntity.status(HttpStatus.OK).body(agendamentoRecordOut);
+        } catch (NotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

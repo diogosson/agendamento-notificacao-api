@@ -4,6 +4,7 @@ import com.diogosson.agendamento_notificacao_api.business.mapper.IAgendamentoMap
 import com.diogosson.agendamento_notificacao_api.controller.dto.in.AgendamentoRecordIn;
 import com.diogosson.agendamento_notificacao_api.controller.dto.out.AgendamentoRecordOut;
 import com.diogosson.agendamento_notificacao_api.infrastructure.entities.Agendamento;
+import com.diogosson.agendamento_notificacao_api.infrastructure.exceptions.NotFoundException;
 import com.diogosson.agendamento_notificacao_api.infrastructure.repositories.AgendamentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,14 @@ public class AgendamentoService {
         Agendamento agendamentoSalvo = agendamentoRepository.save(agendamento);
 
         return agendamentoMapper.paraOut(agendamentoSalvo);
+    }
+
+    public AgendamentoRecordOut buscarAgendamentoPorId(Long id) {
+        Agendamento agendamento = agendamentoRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Id não encontrado"));
+
+        return agendamentoMapper.paraOut(agendamento);
     }
 
 }
