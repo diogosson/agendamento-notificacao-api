@@ -3,7 +3,7 @@ package com.diogosson.agendamento_notificacao_api.business.mapper;
 import com.diogosson.agendamento_notificacao_api.controller.dto.in.AgendamentoRecordIn;
 import com.diogosson.agendamento_notificacao_api.controller.dto.out.AgendamentoRecordOut;
 import com.diogosson.agendamento_notificacao_api.infrastructure.entities.Agendamento;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 
 import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 
@@ -11,4 +11,9 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 public interface IAgendamentoMapper {
     Agendamento paraEntity(AgendamentoRecordIn agendamento);
     AgendamentoRecordOut paraOut(Agendamento agendamento);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "dataHoraModificacao", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "statusNotificacao", constant = "CANCELADO")
+    Agendamento paraEntityCancelamento(Agendamento agendamento);
 }
