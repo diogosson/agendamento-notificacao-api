@@ -33,4 +33,15 @@ public class AgendamentoController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> cancelarAgendamento(@PathVariable("id") Long id) {
+
+        try {
+            agendamentoService.cancelarAgendamentoPorId(id);
+            return ResponseEntity.accepted().build();
+        } catch (NotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
